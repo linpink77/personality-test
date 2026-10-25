@@ -1,0 +1,981 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>人格特刊 · 16 型人格测试与分析</title>
+<meta name="description" content="一份杂志编辑风的 16 型人格测试：56 道题，约 10 分钟，出结果后附详细人格特稿分析。">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,600;0,9..144,900;1,9..144,600;1,9..144,900&family=Noto+Serif+SC:wght@400;700;900&display=swap" rel="stylesheet">
+<style>
+/* ============ 设计 token：杂志编辑风 ============ */
+:root{
+  --paper: oklch(0.965 0.014 85);
+  --paper-2: oklch(0.935 0.02 85);
+  --ink: oklch(0.23 0.022 60);
+  --ink-2: oklch(0.38 0.02 60);
+  --ink-3: oklch(0.52 0.02 60);
+  --rule: oklch(0.23 0.022 60 / 0.9);
+  --c-nt: oklch(0.52 0.17 255);
+  --c-nf: oklch(0.56 0.185 18);
+  --c-sj: oklch(0.50 0.11 152);
+  --c-sp: oklch(0.63 0.175 48);
+  --accent: var(--c-sp);
+  --accent-ink: var(--paper);
+  --serif: "Noto Serif SC","Source Han Serif SC","SimSun",serif;
+  --display: "Fraunces","Noto Serif SC","Georgia",serif;
+  --ease: cubic-bezier(0.22, 1, 0.36, 1);
+}
+*{ box-sizing: border-box; margin: 0; padding: 0; }
+html{ scroll-behavior: smooth; }
+body{
+  font-family: var(--serif);
+  background: var(--paper);
+  color: var(--ink);
+  font-size: clamp(1rem, 0.92rem + 0.35vw, 1.15rem);
+  line-height: 1.85;
+  -webkit-font-smoothing: antialiased;
+}
+::selection{ background: var(--accent); color: var(--accent-ink); }
+button{ font-family: inherit; cursor: pointer; }
+
+/* ============ 刊头 ============ */
+.masthead{
+  display: flex; justify-content: space-between; align-items: baseline; gap: 1rem;
+  padding: 0.85rem clamp(1.25rem, 4vw, 3.5rem);
+  border-bottom: 1px solid var(--rule);
+  font-size: 0.72rem; letter-spacing: 0.18em; color: var(--ink-2);
+  text-transform: uppercase;
+}
+.masthead b{ color: var(--ink); font-weight: 700; }
+.masthead .mast-mid{ display: none; }
+@media (min-width: 720px){ .masthead .mast-mid{ display: inline; } }
+
+/* ============ 视图切换 ============ */
+.view{ display: none; min-height: calc(100vh - 3.2rem); }
+.view.active{ display: block; animation: viewIn 0.6s var(--ease) both; }
+@keyframes viewIn{ from{ opacity: 0; transform: translateY(14px); } to{ opacity: 1; transform: none; } }
+
+/* ============ 首页 ============ */
+.home-wrap{
+  max-width: 1200px; margin: 0 auto;
+  padding: clamp(2.5rem, 6vw, 5.5rem) clamp(1.25rem, 4vw, 3.5rem) 3rem;
+  display: grid; grid-template-columns: repeat(12, 1fr); gap: 1.5rem;
+}
+.hero{ grid-column: 1 / 9; }
+.kicker{
+  display: inline-block; font-size: 0.78rem; letter-spacing: 0.35em;
+  border-top: 3px solid var(--ink); padding-top: 0.6rem; margin-bottom: 1.6rem;
+  color: var(--ink-2);
+}
+.hero h1{
+  font-weight: 900; line-height: 1.12; letter-spacing: 0.02em;
+  font-size: clamp(2.8rem, 8.5vw, 7rem);
+}
+.hero h1 .hp-accent{ color: var(--accent); }
+.hero h1 .hp-indent{ display: inline-block; margin-left: clamp(1.5rem, 8vw, 7rem); }
+.hero .lede{
+  margin-top: 2rem; max-width: 34em; color: var(--ink-2);
+  font-size: clamp(1.02rem, 0.98rem + 0.4vw, 1.22rem);
+}
+.hero-side{
+  grid-column: 10 / 13; align-self: end;
+  border-left: 1px solid var(--rule); padding-left: 1.25rem;
+}
+.hero-side .v-text{
+  writing-mode: vertical-rl; font-size: 0.8rem; letter-spacing: 0.5em;
+  color: var(--ink-3); height: 11em; margin-bottom: 1.5rem;
+}
+.meta-list{ list-style: none; font-size: 0.85rem; color: var(--ink-2); }
+.meta-list li{
+  display: flex; justify-content: space-between; gap: 1rem;
+  border-bottom: 1px dotted var(--ink-3); padding: 0.45rem 0;
+}
+.meta-list li b{ color: var(--ink); font-family: var(--display); font-weight: 600; }
+.home-cta{ grid-column: 1 / 9; margin-top: 3rem; display: flex; flex-wrap: wrap; gap: 1rem; align-items: center; }
+.btn{
+  display: inline-flex; align-items: center; gap: 0.75em;
+  border: 1px solid var(--ink); background: var(--ink); color: var(--paper);
+  padding: 1em 2.2em; font-size: 1.05rem; font-weight: 700; letter-spacing: 0.14em;
+  transition: transform 0.35s var(--ease), background 0.35s var(--ease), color 0.35s var(--ease), box-shadow 0.35s var(--ease);
+}
+.btn:hover{ transform: translate(-2px, -2px); box-shadow: 4px 4px 0 var(--accent); }
+.btn:active{ transform: none; box-shadow: none; }
+.btn-ghost{ background: transparent; color: var(--ink); }
+.btn-ghost:hover{ background: var(--paper-2); box-shadow: 4px 4px 0 var(--ink); }
+.home-strip{
+  grid-column: 1 / 13; margin-top: clamp(3rem, 7vw, 5.5rem);
+  border-top: 1px solid var(--rule); border-bottom: 1px solid var(--rule);
+  padding: 1.1rem 0; display: flex; flex-wrap: wrap; gap: 0.6rem 2.4rem;
+  font-size: 0.8rem; letter-spacing: 0.22em; color: var(--ink-2);
+}
+.home-strip span b{ color: var(--accent); font-family: var(--display); margin-right: 0.5em; }
+
+/* ============ 答题页 ============ */
+.quiz-head{
+  position: sticky; top: 0; z-index: 10;
+  background: var(--paper); border-bottom: 1px solid var(--rule);
+  padding: 1rem clamp(1.25rem, 4vw, 3.5rem) 1.4rem;
+}
+.quiz-head-row{
+  display: flex; justify-content: space-between; align-items: baseline;
+  font-size: 0.8rem; letter-spacing: 0.2em; color: var(--ink-2); margin-bottom: 0.8rem;
+}
+.quiz-head-row b{ font-family: var(--display); font-size: 1.05rem; color: var(--ink); letter-spacing: 0.05em; }
+.progress{ height: 3px; background: var(--paper-2); position: relative; overflow: hidden; }
+.progress i{
+  position: absolute; inset: 0; background: var(--accent);
+  transform-origin: left; transform: scaleX(0);
+  transition: transform 0.5s var(--ease);
+}
+.quiz-main{
+  max-width: 820px; margin: 0 auto;
+  padding: clamp(2.5rem, 6vw, 4.5rem) clamp(1.25rem, 4vw, 2rem) 4rem;
+}
+.q-card{ transition: opacity 0.3s var(--ease), transform 0.3s var(--ease); }
+.q-card.leaving{ opacity: 0; transform: translateY(-10px); }
+.q-card.entering{ opacity: 0; transform: translateY(12px); }
+.q-num{
+  font-family: var(--display); font-weight: 900; font-size: 0.95rem;
+  color: var(--accent); letter-spacing: 0.12em;
+}
+.q-num small{ color: var(--ink-3); font-weight: 600; }
+.q-text{
+  font-size: clamp(1.5rem, 1.2rem + 1.8vw, 2.4rem); font-weight: 900; line-height: 1.4;
+  margin: 0.9rem 0 2.8rem; border-top: 1px solid var(--rule); padding-top: 1.4rem;
+}
+.likert{ display: grid; grid-template-columns: repeat(5, 1fr); gap: 0.7rem; }
+@media (max-width: 640px){ .likert{ grid-template-columns: 1fr; } }
+.likert button{
+  border: 1px solid var(--ink); background: transparent; color: var(--ink);
+  padding: 1.1em 0.5em; font-size: 0.92rem; font-weight: 700; letter-spacing: 0.1em;
+  transition: background 0.25s var(--ease), color 0.25s var(--ease), transform 0.25s var(--ease);
+}
+.likert button:hover{ background: var(--paper-2); transform: translateY(-2px); }
+.likert button.picked{ background: var(--accent); border-color: var(--accent); color: var(--accent-ink); transform: scale(0.97); }
+.likert-scale{
+  display: flex; justify-content: space-between; margin-top: 0.7rem;
+  font-size: 0.72rem; letter-spacing: 0.2em; color: var(--ink-3);
+}
+.quiz-nav{ margin-top: 3rem; display: flex; justify-content: space-between; align-items: center; }
+.link-btn{
+  background: none; border: none; border-bottom: 1px solid var(--ink-3);
+  color: var(--ink-2); font-size: 0.9rem; letter-spacing: 0.15em; padding: 0.2em 0;
+  transition: color 0.25s var(--ease);
+}
+.link-btn:hover{ color: var(--ink); }
+.link-btn[disabled]{ opacity: 0.25; cursor: default; }
+
+/* ============ 计算动画 ============ */
+.calc-wrap{
+  min-height: calc(100vh - 3.2rem); display: grid; place-content: center; text-align: center;
+  padding: 2rem; gap: 2.2rem;
+}
+.calc-letters{ display: flex; gap: clamp(0.8rem, 4vw, 2.2rem); justify-content: center; }
+.calc-letters .cl{
+  font-family: var(--display); font-weight: 900;
+  font-size: clamp(2.6rem, 9vw, 5.5rem); line-height: 1; color: var(--ink);
+  border: 1px solid var(--rule); padding: 0.35em 0.4em 0.5em;
+  animation: flipLetter 1.2s var(--ease) infinite;
+}
+.calc-letters .cl:nth-child(2){ animation-delay: 0.15s; }
+.calc-letters .cl:nth-child(3){ animation-delay: 0.3s; }
+.calc-letters .cl:nth-child(4){ animation-delay: 0.45s; }
+@keyframes flipLetter{
+  0%, 100%{ transform: rotateX(0); color: var(--ink); }
+  50%{ transform: rotateX(90deg); color: var(--accent); }
+}
+.calc-tag{ font-size: 0.85rem; letter-spacing: 0.4em; color: var(--ink-2); }
+.calc-tag::after{ content: "…"; animation: dots 1.2s steps(4) infinite; }
+@keyframes dots{ 0%{ content: ""; } 25%{ content: "·"; } 50%{ content: "··"; } 75%{ content: "···"; } }
+
+/* ============ 结果页 ============ */
+.r-hero{ padding: clamp(2.5rem, 6vw, 4.5rem) clamp(1.25rem, 4vw, 3.5rem); background: var(--accent); color: var(--accent-ink); }
+.r-hero-inner{ max-width: 1200px; margin: 0 auto; display: grid; grid-template-columns: repeat(12, 1fr); gap: 1.5rem; align-items: end; }
+.r-code{
+  grid-column: 1 / 7; font-family: var(--display); font-weight: 900;
+  font-size: clamp(4rem, 13vw, 11rem); line-height: 0.95; letter-spacing: 0.02em;
+}
+.r-hero-name{ grid-column: 7 / 13; }
+.r-hero-name .r-issue{ font-size: 0.75rem; letter-spacing: 0.35em; opacity: 0.85; margin-bottom: 1rem; }
+.r-hero-name h2{ font-weight: 900; font-size: clamp(2rem, 4.5vw, 3.6rem); line-height: 1.2; }
+.r-hero-name .r-tagline{ margin-top: 0.8rem; font-style: italic; opacity: 0.92; font-size: 1.05rem; }
+@media (max-width: 760px){ .r-code{ grid-column: 1 / 13; } .r-hero-name{ grid-column: 1 / 13; } }
+
+.r-body{
+  max-width: 1200px; margin: 0 auto;
+  padding: clamp(2.5rem, 6vw, 4.5rem) clamp(1.25rem, 4vw, 3.5rem) 4rem;
+  container-type: inline-size;
+}
+.r-section{ margin-bottom: clamp(3rem, 7vw, 5rem); }
+.r-sec-head{
+  display: flex; align-items: baseline; gap: 1rem;
+  border-top: 3px solid var(--ink); padding-top: 0.9rem; margin-bottom: 1.8rem;
+}
+.r-sec-head h3{ font-weight: 900; font-size: clamp(1.4rem, 1.1rem + 1.5vw, 2rem); letter-spacing: 0.08em; }
+.r-sec-head .sec-no{ font-family: var(--display); font-weight: 600; font-style: italic; color: var(--accent); }
+.r-grid-2{ display: grid; grid-template-columns: 7fr 5fr; gap: clamp(1.5rem, 4vw, 3.5rem); align-items: start; }
+@container (max-width: 760px){ .r-grid-2{ grid-template-columns: 1fr; } }
+
+/* 维度条 */
+.dims{ display: grid; gap: 1.5rem; }
+.dim-row{ border: 1px solid var(--rule); padding: 1.1rem 1.2rem 1.2rem; background: var(--paper); }
+.dim-row .dim-top{ display: flex; justify-content: space-between; align-items: baseline; margin-bottom: 0.7rem; }
+.dim-row .dim-letters{ font-family: var(--display); font-weight: 600; font-size: 0.95rem; color: var(--ink-3); }
+.dim-row .dim-letters b{ color: var(--accent); font-size: 1.35rem; font-weight: 900; }
+.dim-row .dim-pct{ font-family: var(--display); font-weight: 900; font-size: 1.5rem; }
+.dim-row .dim-pct small{ font-size: 0.8rem; font-weight: 600; color: var(--ink-3); margin-left: 0.4em; }
+.dim-track{ height: 14px; background: var(--paper-2); border: 1px solid var(--rule); position: relative; }
+.dim-track i{
+  position: absolute; inset: 1px auto 1px 1px; background:
+    repeating-linear-gradient(-45deg, var(--accent) 0 6px, color-mix(in oklch, var(--accent), var(--paper) 30%) 6px 12px);
+  width: 0; transition: width 0.9s var(--ease);
+}
+.dim-row .dim-note{ margin-top: 0.6rem; font-size: 0.78rem; color: var(--ink-3); letter-spacing: 0.08em; }
+
+/* 雷达图 */
+.radar-box{ border: 1px solid var(--rule); padding: 1.2rem; background: var(--paper); }
+.radar-box svg{ width: 100%; height: auto; display: block; }
+.radar-cap{ margin-top: 0.8rem; font-size: 0.75rem; letter-spacing: 0.2em; color: var(--ink-3); text-align: center; }
+
+/* 内容板块 */
+.prose p{ margin-bottom: 1.1em; }
+.prose p:last-child{ margin-bottom: 0; }
+.list-ed{ list-style: none; counter-reset: ed; }
+.list-ed li{
+  counter-increment: ed; display: grid; grid-template-columns: 2.4em 1fr; gap: 0.9em;
+  padding: 0.85em 0; border-bottom: 1px dotted var(--ink-3);
+}
+.list-ed li::before{
+  content: counter(ed, decimal-leading-zero); font-family: var(--display);
+  font-weight: 900; font-style: italic; color: var(--accent); font-size: 1.1em;
+}
+.list-neg li::before{ color: var(--ink-3); }
+.list-neg{ counter-reset: ed; }
+
+/* 逐题回顾 */
+.review summary{
+  cursor: pointer; list-style: none; display: flex; justify-content: space-between; align-items: center;
+  border: 1px solid var(--ink); padding: 1em 1.4em; font-weight: 700; letter-spacing: 0.1em;
+  transition: background 0.3s var(--ease), color 0.3s var(--ease);
+}
+.review summary::-webkit-details-marker{ display: none; }
+.review summary::after{ content: "+"; font-family: var(--display); font-size: 1.4em; line-height: 1; }
+.review[open] summary::after{ content: "−"; }
+.review summary:hover{ background: var(--paper-2); }
+.review-list{ margin-top: 1rem; border-top: 1px solid var(--rule); }
+.review-item{ display: grid; grid-template-columns: 5.5em 1fr; gap: 1rem; padding: 1rem 0.2rem; border-bottom: 1px dotted var(--ink-3); }
+.review-item .rv-meta{ font-size: 0.72rem; letter-spacing: 0.12em; color: var(--ink-3); line-height: 1.7; }
+.review-item .rv-meta .rv-ans{ color: var(--accent); font-weight: 700; }
+.review-item .rv-body b{ display: block; font-size: 0.98rem; line-height: 1.6; }
+.review-item .rv-note{ margin-top: 0.35em; font-size: 0.82rem; color: var(--ink-2); }
+@media (max-width: 560px){ .review-item{ grid-template-columns: 1fr; gap: 0.3rem; } }
+
+.r-foot{
+  border-top: 1px solid var(--rule); margin-top: 2rem; padding-top: 2rem;
+  display: flex; flex-wrap: wrap; gap: 1rem; justify-content: space-between; align-items: center;
+}
+.disclaimer{ font-size: 0.78rem; color: var(--ink-3); letter-spacing: 0.06em; max-width: 32em; }
+
+/* 滚动进场 */
+.reveal{ opacity: 0; transform: translateY(18px); transition: opacity 0.7s var(--ease), transform 0.7s var(--ease); }
+.reveal.revealed{ opacity: 1; transform: none; }
+@media (prefers-reduced-motion: reduce){
+  *, *::before, *::after{ animation-duration: 0.01ms !important; transition-duration: 0.01ms !important; }
+  .reveal{ opacity: 1; transform: none; }
+}
+:focus-visible{ outline: 3px solid var(--accent); outline-offset: 2px; }
+</style>
+</head>
+<body>
+
+<header class="masthead">
+  <span><b>人格特刊</b> · PERSONALITY EDITION</span>
+  <span class="mast-mid">十六型观察 · 问卷与深度报道</span>
+  <span id="mastDate">VOL.01</span>
+</header>
+
+<!-- ========== 首页 ========== -->
+<section class="view" data-view="home" id="view-home">
+  <div class="home-wrap">
+    <div class="hero">
+      <span class="kicker">十六型人格 · 深度自测</span>
+      <h1>你，<span class="hp-indent">究竟是</span><br>哪<span class="hp-accent">一类</span>人？</h1>
+      <p class="lede">五十六道题，四组维度，一份属于你的封面特稿。答完之后，我们不只给你四个字母——我们会把你的优势、软肋、感情与职业，像写人物专访一样，为你细细排印出来。</p>
+    </div>
+    <aside class="hero-side">
+      <div class="v-text">认识你自己 · ΓΝΩΘΙ ΣΕΑΥΤΟΝ</div>
+      <ul class="meta-list">
+        <li><span>题目</span><b>56 题</b></li>
+        <li><span>用时</span><b>约 10 分钟</b></li>
+        <li><span>量表</span><b>五级李克特</b></li>
+        <li><span>报告</span><b>逐题解析</b></li>
+      </ul>
+    </aside>
+    <div class="home-cta">
+      <button class="btn" data-action="start">开始测试 →</button>
+      <button class="btn btn-ghost" data-action="continue" id="btnContinue" hidden>继续上次的答题</button>
+      <button class="btn btn-ghost" data-action="lastResult" id="btnLast" hidden>查看上次结果</button>
+    </div>
+    <div class="home-strip">
+      <span><b>E</b>外向 — 内向 I</span>
+      <span><b>S</b>实感 — 直觉 N</span>
+      <span><b>T</b>思考 — 情感 F</span>
+      <span><b>J</b>判断 — 知觉 P</span>
+    </div>
+  </div>
+</section>
+
+<!-- ========== 答题页 ========== -->
+<section class="view" data-view="quiz" id="view-quiz">
+  <div class="quiz-head">
+    <div class="quiz-head-row">
+      <span>问卷进行中</span>
+      <b id="quizCount">1 / 56</b>
+    </div>
+    <div class="progress"><i id="quizBar"></i></div>
+  </div>
+  <div class="quiz-main">
+    <div class="q-card" id="qCard">
+      <div class="q-num" id="qNum"></div>
+      <h2 class="q-text" id="qText"></h2>
+      <div class="likert" id="likert" role="group" aria-label="同意程度"></div>
+      <div class="likert-scale"><span>← 非常不同意</span><span>非常同意 →</span></div>
+    </div>
+    <div class="quiz-nav">
+      <button class="link-btn" data-action="prev" id="btnPrev">← 上一题</button>
+      <button class="link-btn" data-action="quit">中途离开（进度已保存）</button>
+    </div>
+  </div>
+</section>
+
+<!-- ========== 计算动画 ========== -->
+<section class="view" data-view="calculating" id="view-calc">
+  <div class="calc-wrap">
+    <div class="calc-letters" aria-hidden="true">
+      <span class="cl" id="cl1">E</span><span class="cl" id="cl2">S</span><span class="cl" id="cl3">T</span><span class="cl" id="cl4">J</span>
+    </div>
+    <p class="calc-tag">正在为你排印专属特稿</p>
+  </div>
+</section>
+
+<!-- ========== 结果页 ========== -->
+<section class="view" data-view="result" id="view-result">
+  <div class="r-hero" id="rHero">
+    <div class="r-hero-inner">
+      <div class="r-code" id="rCode">····</div>
+      <div class="r-hero-name">
+        <p class="r-issue" id="rIssue">封面人物 · 你的类型</p>
+        <h2 id="rName"></h2>
+        <p class="r-tagline" id="rTagline"></p>
+      </div>
+    </div>
+  </div>
+  <div class="r-body">
+    <div class="r-section reveal">
+      <div class="r-sec-head"><span class="sec-no">No.1</span><h3>你的维度版面</h3></div>
+      <div class="r-grid-2">
+        <div class="dims" id="rDims"></div>
+        <div class="radar-box">
+          <div id="rRadar"></div>
+          <p class="radar-cap">四维倾向雷达 · 越靠外越倾向右侧字母</p>
+        </div>
+      </div>
+    </div>
+    <div class="r-section reveal">
+      <div class="r-sec-head"><span class="sec-no">No.2</span><h3>人格特稿</h3></div>
+      <div class="prose" id="rOverview"></div>
+    </div>
+    <div class="r-section reveal">
+      <div class="r-sec-head"><span class="sec-no">No.3</span><h3>你的优势</h3></div>
+      <ol class="list-ed" id="rStrengths"></ol>
+    </div>
+    <div class="r-section reveal">
+      <div class="r-sec-head"><span class="sec-no">No.4</span><h3>你的软肋</h3></div>
+      <ol class="list-ed list-neg" id="rWeaknesses"></ol>
+    </div>
+    <div class="r-section reveal">
+      <div class="r-sec-head"><span class="sec-no">No.5</span><h3>恋爱与人际</h3></div>
+      <div class="prose" id="rRelation"></div>
+    </div>
+    <div class="r-section reveal">
+      <div class="r-sec-head"><span class="sec-no">No.6</span><h3>职业发展建议</h3></div>
+      <div class="prose" id="rCareer"></div>
+    </div>
+    <div class="r-section reveal">
+      <div class="r-sec-head"><span class="sec-no">No.7</span><h3>逐题回顾</h3></div>
+      <details class="review">
+        <summary>展开全部 56 题的测量说明与你当时的作答</summary>
+        <div class="review-list" id="rReview"></div>
+      </details>
+    </div>
+    <div class="r-foot">
+      <p class="disclaimer">本测试为自我探索与娱乐参考，结果基于自陈式问卷，不构成任何心理学诊断。人格倾向会随经历流动，重测可能波动。</p>
+      <button class="btn" data-action="restart">重新测试 →</button>
+    </div>
+  </div>
+</section>
+
+<!-- ======== 核心数据与计分逻辑（可被测试脚本提取） ======== -->
+<script id="core">
+/* ===== 16 型人格测试 · 题库与计分核心 =====
+ * 每维 14 题（7 正向 + 7 反向），pole 为该维正向陈述所指字母。
+ * score = reverse ? 4 - raw : raw（对 pole 的贡献，raw∈[0,4]）。
+ */
+const QUESTIONS = [
+  // ---- E / I（pole: E）----
+  { id: 1,  dim: "EI", pole: "E", reverse: false, text: "在聚会上，我很容易主动和陌生人聊起来。", note: "测量社交主动性：同意说明你更愿意由自己开启一段人际互动。" },
+  { id: 2,  dim: "EI", pole: "E", reverse: true,  text: "独处一段时间之后，我感到精力恢复了。", note: "测量能量来源：同意说明安静独处更能为你充电，偏向内向一端。" },
+  { id: 3,  dim: "EI", pole: "E", reverse: false, text: "小组讨论时，我常常是发言比较多的那个人。", note: "测量群体中的表达倾向：同意说明你在人群里更常扮演发声者。" },
+  { id: 4,  dim: "EI", pole: "E", reverse: true,  text: "一整天的社交活动结束后，我更想安静地待着。", note: "测量社交后的恢复方式：同意说明你需要退回安静环境回血。" },
+  { id: 5,  dim: "EI", pole: "E", reverse: false, text: "我会主动张罗朋友们的聚会或活动。", note: "测量发起群体活动的意愿：这是外向者常见的组织者角色。" },
+  { id: 6,  dim: "EI", pole: "E", reverse: true,  text: "在陌生环境里，我倾向于先观察，再慢慢加入。", note: "测量进入新社交环境的节奏：先观察再融入，是偏内向的典型策略。" },
+  { id: 7,  dim: "EI", pole: "E", reverse: false, text: "和很多人待在一起常常让我感到兴奋。", note: "测量人群带来的能量感：外向者往往在人群中越待越有精神。" },
+  { id: 8,  dim: "EI", pole: "E", reverse: true,  text: "比起面对面，我更喜欢用文字交流。", note: "测量偏好的交流渠道：偏好文字常意味着需要思考缓冲空间。" },
+  { id: 9,  dim: "EI", pole: "E", reverse: false, text: "我的想法常常在说话的过程中越来越清晰。", note: "测量通过表达来思考的倾向：外向者常边说边想，内向者倾向先想后说。" },
+  { id: 10, dim: "EI", pole: "E", reverse: true,  text: "周末我更愿意安排安静的独处活动。", note: "测量休息日的能量偏好：用独处恢复精力偏向内向一端。" },
+  { id: 11, dim: "EI", pole: "E", reverse: false, text: "我不太需要长时间独处来恢复精力。", note: "测量对独处充电的依赖程度：不太需要，是偏外向的信号。" },
+  { id: 12, dim: "EI", pole: "E", reverse: true,  text: "热闹的场合待久了，我会觉得被消耗。", note: "测量长时间社交的消耗感：被消耗感强，是偏内向的典型体验。" },
+  { id: 13, dim: "EI", pole: "E", reverse: false, text: "我经常主动开启一段新的对话。", note: "测量日常互动中的启动频率：高频主动开场，指向外向。" },
+  { id: 14, dim: "EI", pole: "E", reverse: true,  text: "别人常说我是个安静的人。", note: "测量他人眼中的音量与存在感：常被形容为安静，偏向内向。" },
+  // ---- S / N（pole: S）----
+  { id: 15, dim: "SN", pole: "S", reverse: false, text: "我更相信亲身经验和具体事实，而不是抽象理论。", note: "测量信息来源偏好：信任经验与事实，指向实感（S）。" },
+  { id: 16, dim: "SN", pole: "S", reverse: true,  text: "我常常沉浸在自己的想象和联想里。", note: "测量内在想象世界的活跃程度：联想丰富，指向直觉（N）。" },
+  { id: 17, dim: "SN", pole: "S", reverse: false, text: "我常常注意到别人容易忽略的细节。", note: "测量对具体细节的敏感度：这是实感型的典型优势。" },
+  { id: 18, dim: "SN", pole: "S", reverse: true,  text: "我喜欢琢磨概念背后的含义和隐喻。", note: "测量对抽象含义的兴趣：享受隐喻与深意，指向直觉。" },
+  { id: 19, dim: "SN", pole: "S", reverse: false, text: "描述一件事时，我习惯按时间或步骤讲清楚。", note: "测量叙事与思维的具体性：线性、有序的表达偏向实感。" },
+  { id: 20, dim: "SN", pole: "S", reverse: true,  text: "我对未来可能发生的事充满设想。", note: "测量面向可能性与未来的关注点：想象未来图景是直觉的标志。" },
+  { id: 21, dim: "SN", pole: "S", reverse: false, text: "我更喜欢做有明确方法可循的工作。", note: "测量对既定流程的偏好：偏爱清晰路径，指向实感。" },
+  { id: 22, dim: "SN", pole: "S", reverse: true,  text: "我总能看出两件看似无关的事情之间的联系。", note: "测量联想与模式识别：跨域连接是直觉型的思维方式。" },
+  { id: 23, dim: "SN", pole: "S", reverse: false, text: "我倾向于先照顾眼前的现实，再考虑长远的可能。", note: "测量当下与未来的优先级：现实优先，指向实感。" },
+  { id: 24, dim: "SN", pole: "S", reverse: true,  text: "比起按部就班的任务，我更喜欢需要灵感和创意的任务。", note: "测量任务类型偏好：偏好开放性创意任务，指向直觉。" },
+  { id: 25, dim: "SN", pole: "S", reverse: false, text: "学新东西时，我喜欢从具体例子入手。", note: "测量学习路径偏好：从实例到原理，是实感型的学习节奏。" },
+  { id: 26, dim: "SN", pole: "S", reverse: true,  text: "读故事或看剧时，我常忍不住推测后续走向和人物动机。", note: "测量推演与解读的倾向：不断预测深层动机，指向直觉。" },
+  { id: 27, dim: "SN", pole: "S", reverse: false, text: "比起「这意味着什么」，我更常想「这实际上是什么」。", note: "测量关注点的具体—抽象取向：关注实际是什么，指向实感。" },
+  { id: 28, dim: "SN", pole: "S", reverse: true,  text: "比起事实本身，我更容易记住一件事给我的感觉或启发。", note: "测量记忆与印象的加工方式：记住意义与启发，指向直觉。" },
+  // ---- T / F（pole: T）----
+  { id: 29, dim: "TF", pole: "T", reverse: false, text: "做决定时，我优先考虑逻辑上是否站得住脚。", note: "测量决策的第一依据：逻辑优先，指向思考（T）。" },
+  { id: 30, dim: "TF", pole: "T", reverse: true,  text: "我很容易察觉到身边人情绪的细微变化。", note: "测量对情绪线索的敏感度：高敏感常指向情感（F）。" },
+  { id: 31, dim: "TF", pole: "T", reverse: false, text: "别人指出我方案里的漏洞时，我先看对不对，再看语气。", note: "测量接收批评的方式：先论对错再看情绪，指向思考。" },
+  { id: 32, dim: "TF", pole: "T", reverse: true,  text: "做决定时，周围人的感受对我影响很大。", note: "测量他人感受在决策中的权重：权重高，指向情感。" },
+  { id: 33, dim: "TF", pole: "T", reverse: false, text: "朋友倾诉烦恼时，我常常忍不住先给解决方案。", note: "测量支持他人的第一反应：先解决问题，是思考型的本能。" },
+  { id: 34, dim: "TF", pole: "T", reverse: true,  text: "我愿意为了让气氛融洽而调整自己的表达方式。", note: "测量对人际和谐的投入：愿意为氛围让步，指向情感。" },
+  { id: 35, dim: "TF", pole: "T", reverse: false, text: "我认为公平意味着用同一把尺子衡量所有人。", note: "测量公平观：规则一致性优先，是思考型的公平观。" },
+  { id: 36, dim: "TF", pole: "T", reverse: true,  text: "看到感人的故事，我常常比当事人还先动容。", note: "测量情感共鸣的强度：强烈共情指向情感（F）。" },
+  { id: 37, dim: "TF", pole: "T", reverse: false, text: "我能比较容易地把感受和事情本身分开来看。", note: "测量情理分离的能力：容易分离，指向思考。" },
+  { id: 38, dim: "TF", pole: "T", reverse: true,  text: "比起「严厉但正确」，我更愿意被评价为「温暖」。", note: "测量自我期待的价值排序：选温暖，指向情感。" },
+  { id: 39, dim: "TF", pole: "T", reverse: false, text: "看影视作品时，情节的逻辑漏洞比角色的悲欢更让我在意。", note: "测量观赏作品时的注意点：先挑逻辑，指向思考。" },
+  { id: 40, dim: "TF", pole: "T", reverse: true,  text: "批评别人之前，我会反复斟酌怎么说才不伤人。", note: "测量表达批评时的顾虑：反复措辞以照顾感受，指向情感。" },
+  { id: 41, dim: "TF", pole: "T", reverse: false, text: "辩论会让我感到兴奋，哪怕立场只是临时分配的。", note: "测量对观点交锋的态度：享受辩论本身，指向思考。" },
+  { id: 42, dim: "TF", pole: "T", reverse: true,  text: "我常凭「感觉对不对」来评价一件事。", note: "测量评价事物的方式：价值感优先，指向情感。" },
+  // ---- J / P（pole: J）----
+  { id: 43, dim: "JP", pole: "J", reverse: false, text: "出门旅行前，我喜欢提前把行程安排好。", note: "测量对计划的偏好：提前规划，指向判断（J）。" },
+  { id: 44, dim: "JP", pole: "J", reverse: true,  text: "我享受随性而至的出行，走到哪儿算哪儿。", note: "测量对即兴的享受：随机应变更自在，指向知觉（P）。" },
+  { id: 45, dim: "JP", pole: "J", reverse: false, text: "待办的事情，我倾向于尽早完成而不是拖到最后。", note: "测量收尾风格：提前完成以获得掌控感，指向判断。" },
+  { id: 46, dim: "JP", pole: "J", reverse: true,  text: "计划赶不上变化，所以我习惯见招拆招。", note: "测量对不确定性的应对：灵活应对优于死守计划，指向知觉。" },
+  { id: 47, dim: "JP", pole: "J", reverse: false, text: "我的书桌和文件大多保持有条理的状态。", note: "测量环境秩序感：长期保持条理，指向判断。" },
+  { id: 48, dim: "JP", pole: "J", reverse: true,  text: "我常常同时开好几个头，收尾的事情往后放。", note: "测量多线程与收尾习惯：多头并进，指向知觉。" },
+  { id: 49, dim: "JP", pole: "J", reverse: false, text: "突然改变计划会让我有些不舒服。", note: "测量对计划变动的舒适度：变动带来不适，指向判断。" },
+  { id: 50, dim: "JP", pole: "J", reverse: true,  text: "在截止日期前灵感爆发，是我熟悉的节奏。", note: "测量与期限的关系：临近冲刺才发力，是知觉型的典型节奏。" },
+  { id: 51, dim: "JP", pole: "J", reverse: false, text: "做事之前，我会先想清楚步骤和时间安排。", note: "测量行动前的规划习惯：先谋后动，指向判断。" },
+  { id: 52, dim: "JP", pole: "J", reverse: true,  text: "房间虽然有点乱，但我知道每样东西大概在哪儿。", note: "测量对「有序」的定义：乱中有序的自在感，指向知觉。" },
+  { id: 53, dim: "JP", pole: "J", reverse: false, text: "我喜欢把事情定下来，不喜欢一直悬着。", note: "测量对确定性的需求：尽早拍板，指向判断。" },
+  { id: 54, dim: "JP", pole: "J", reverse: true,  text: "临时邀约往往让我兴奋，而不是为难。", note: "测量对突发安排的反应：兴奋多于为难，指向知觉。" },
+  { id: 55, dim: "JP", pole: "J", reverse: false, text: "提前留出余量完成重要的事，会让我更安心。", note: "测量缓冲偏好：留余量求安心，指向判断。" },
+  { id: 56, dim: "JP", pole: "J", reverse: true,  text: "我倾向于边做边调整，而不是想清楚了再动手。", note: "测量行动与规划的顺序：先动手再修正，指向知觉。" },
+];
+
+/* 各维度的两端字母与展示顺序 */
+const DIM_LETTERS = {
+  EI: { pole: "E", opp: "I", poleLabel: "外向 E", oppLabel: "内向 I" },
+  SN: { pole: "S", opp: "N", poleLabel: "实感 S", oppLabel: "直觉 N" },
+  TF: { pole: "T", opp: "F", poleLabel: "思考 T", oppLabel: "情感 F" },
+  JP: { pole: "J", opp: "P", poleLabel: "判断 J", oppLabel: "知觉 P" },
+};
+const DIM_ORDER = ["EI", "SN", "TF", "JP"];
+
+/* ===== 计分 =====
+ * 返回 { dims: { EI: { pct, toward: n, away: n }, ... } }
+ * pct = 对 pole 的倾向百分比（0~100）
+ */
+function scoreAnswers(questions, answers) {
+  const dims = {};
+  for (const d of DIM_ORDER) dims[d] = { pct: 50, toward: 0, away: 0 };
+  const sums = { EI: 0, SN: 0, TF: 0, JP: 0 };
+  const counts = { EI: 0, SN: 0, TF: 0, JP: 0 };
+  questions.forEach((q, i) => {
+    const raw = answers[i];
+    if (raw == null) return;
+    const score = q.reverse ? 4 - raw : raw; // 对 pole 的贡献 0~4
+    sums[q.dim] += score;
+    counts[q.dim] += 1;
+    if (raw !== 2) {
+      const towardPole = q.reverse ? raw < 2 : raw > 2;
+      if (towardPole) dims[q.dim].toward += 1; else dims[q.dim].away += 1;
+    }
+  });
+  for (const d of DIM_ORDER) {
+    if (counts[d] > 0) dims[d].pct = Math.round((sums[d] / (4 * counts[d])) * 100);
+  }
+  return dims;
+}
+
+/* ===== 判型 =====
+ * 规则：pct ≥ 50 取 pole，否则取 opp；pct 恰为 50 时启用确定性 tie-break：
+ *   1) 该维非中立作答中多数方向；
+ *   2) 该维第一道非中立题的方向；
+ *   3) 兜底取 pole（保证两次运行结果一致）。
+ * 强度标签：≥75 显著 / 60-74 明显 / 51-59 轻微 / =50 轻微（tie-break 命中）
+ */
+function judge(questions, answers) {
+  const dims = scoreAnswers(questions, answers);
+  const result = { code: "", dims: {}, tied: [] };
+  for (const d of DIM_ORDER) {
+    const { pole, opp } = DIM_LETTERS[d];
+    let pct = dims[d].pct;
+    let tied = false;
+    if (pct === 50) {
+      tied = true;
+      result.tied.push(d);
+      const { toward, away } = dims[d];
+      if (toward > away) pct = 51;
+      else if (away > toward) pct = 49;
+      else {
+        // 找该维第一道非中立题
+        const q = questions.find((x, i) => x.dim === d && answers[i] != null && answers[i] !== 2);
+        if (q) {
+          const i = questions.indexOf(q);
+          const towardPole = q.reverse ? answers[i] < 2 : answers[i] > 2;
+          pct = towardPole ? 51 : 49;
+        } else {
+          pct = 51; // 全中立：兜底 pole
+        }
+      }
+    }
+    const letter = pct >= 50 ? pole : opp;
+    const abs = letter === pole ? pct : 100 - pct;
+    const label = abs >= 75 ? "显著" : abs >= 60 ? "明显" : "轻微";
+    result.dims[d] = {
+      letter, pct: letter === pole ? pct : 100 - pct,
+      polePct: pct, label, tied,
+      toward: dims[d].toward, away: dims[d].away,
+    };
+    result.code += letter;
+  }
+  return result;
+}
+
+/* ===== 16 型人格内容库 =====
+ * group: NT 分析家 / NF 外交家 / SJ 守护者 / SP 探索家
+ */
+const TYPES = {
+  /* ---------- NT 分析家 ---------- */
+  INTJ: {
+    name: "建筑师", tagline: "一切复杂系统，都值得一幅清晰的图纸", group: "NT", match: ["ENFP", "ENTP"],
+    overview: "你的头脑里常住一位不肯将就的设计师。别人看到的是零散的信息，你看到的是结构、因果和可以优化的路径。你习惯先在脑中把事情推演到完成，再落到现实里验证——因此你常常显得安静而笃定，因为你确实比大多数人更早想明白。你不是没有热情，只是你的热情都投给了那些「值得」的目标：一个能自洽的体系、一项能落地的计划、一个经得起追问的答案。你对外界的评价并不热衷，因为你知道自己正在 building 什么东西。",
+    strengths: ["战略眼光：擅长从纷乱信息中提炼长期路线图", "独立思考：结论自带完整论证链，不随大流动摇", "高效执行：一旦认定目标，能把计划拆到颗粒度并推进到底", "求知内驱：为理解世界本身而学习，知识面深而广"],
+    weaknesses: ["容易低估他人的情绪成本，被评价为「冷」或不近人情", "对完美的执念可能让项目迟迟不开工或迟迟不收尾", "过度依赖自己的判断，较少主动寻求他人视角", "不耐烦处理琐碎的社交润滑，容易在团队里显得疏离"],
+    relationship: "在感情里，你不擅长甜言蜜语，但擅长「长期主义」：你记得伴侣三个月前随口提过的目标，并默默为其铺路。你的爱藏在解决方案里——对方抱怨工作，你直接给出三条改进路径。你需要注意：很多时候对方要的不是答案，而是陪伴。学会先接住情绪，再递上分析，你的深情才容易被看见。",
+    career: "你适合那些「复杂、自主、有长期回报」的领域：战略规划、系统架构、科研、量化分析、产品战略或创业中的核心技术角色。你需要足够的自主权和智力刺激，厌恶微观管理和无意义的会议。职业建议是：有意识地训练表达与协作——你的想法足够好，值得让更多人听懂；而你也需要团队，才能把图纸变成城市。",
+  },
+  INTP: {
+    name: "逻辑学家", tagline: "世界是一本摊开的书，而你想读懂每一页", group: "NT", match: ["ENTJ", "ENFJ"],
+    overview: "你有一种近乎本能的冲动：任何说法都要问一句「真的吗？为什么？」。你的头脑像一间永远亮着灯的实验室，想法在其中不断拆解、重组、验证。你可能同时开着七个兴趣的坑，每个都挖得很深，别人以为你三分钟热度，其实你在搭同一张更大的认知地图。你不喜欢权威，只喜欢逻辑；不喜欢客套，只喜欢聊到点子上的对话。独处对你不是孤独，而是思考的自由。",
+    strengths: ["深度分析：能迅速看穿论述中的逻辑漏洞与隐含前提", "原创思维：擅长跳出框架，提出别人没想到的解法", "开放包容：只要论据够硬，随时愿意被说服更新观点", "专注钻研：对感兴趣的课题有惊人的自学与挖掘能力"],
+    weaknesses: ["想得太多、落地太少，容易停在「理论上可行」", "对例行事务和细节维护缺乏耐心，容易被杂务拖垮", "社交中常显得心不在焉，错过维系关系的基本动作", "过度追求精确，有时用抬杠的方式表达好奇"],
+    relationship: "你表达在乎的方式，是愿意和对方分享你的内心宇宙——那些你从不对外人说的想法。你不擅长仪式感，但会在对方遇到难题时，认真研究到凌晨三点。你需要提醒自己：亲密关系不是待解的课题，伴侣的情绪不需要被「纠正」，只需要被承认。偶尔放下逻辑，说一句「我懂，这确实很难」，比任何分析都动人。",
+    career: "你适合研究、算法、架构设计、数据科学、写作或任何允许深度思考与自主安排的领域。你需要智力上的自由，最怕把才华消耗在填表和开会里。职业建议是：给自己配一个「落地搭档」或一套外部约束（deadline、交付节奏），让想法完成从纸面到现实的最后一公里——那也是你最有成就感的时刻。",
+  },
+  ENTJ: {
+    name: "指挥官", tagline: "与其抱怨棋局，不如执子落盘", group: "NT", match: ["INTP", "INFP"],
+    overview: "你是那种在混乱中天然站出来的人：问题摆在那儿，别人还在讨论，你的头脑里已经出现了组织架构、时间表和责任分工。你目标感极强，且有一种把愿景翻译成行动的天赋。你对效率和能力的标准很高，首先是对自己——你受不了「明明可以更好」的状态。有人觉得你强势，但了解你的人知道，你的锋利对事不对人，你真正想要的从来不是赢过谁，而是把事情做成。",
+    strengths: ["决断力：信息不足时也敢基于判断行动，并为之负责", "系统统筹：擅长调配资源、人力与时间，让目标落地", "直言坦率：反馈清晰不含糊，团队知道该往哪里走", "长远野心：习惯给自己设更高的下一站，持续成长"],
+    weaknesses: ["节奏太快，容易让身边的人感到被碾压而非被带动", "对低效和无能容忍度低，可能伤人而不自知", "习惯掌控，较难真正授权与信任他人的方式", "把自我价值过度绑定在成就上，停不下来"],
+    relationship: "在感情里，你表达爱的方式是「一起变得更好」：为共同生活做规划、在对方卡壳时推一把。你的可靠和担当毋庸置疑，但要注意，伴侣不是你的团队成员，不需要被优化。真正让关系升温的，往往是那些没有议程的散步、不谈目标的晚餐。学会偶尔交出方向盘，你会发现信任感显著上升。",
+    career: "你天生适合领导与创业：管理、战略咨询、投资、工程总包、市场开拓——任何需要把复杂局面拆成仗来打的地方都是你的主场。职业建议是：刻意练习「耐心」这项你唯一不擅长的技能；同时寻找一位敢对你说真话的副手，你的盲点从来不在能力，而在节奏与共情。",
+  },
+  ENTP: {
+    name: "辩论家", tagline: "没有什么理所当然，值得被再想一遍", group: "NT", match: ["INFJ", "INTJ"],
+    overview: "你的头脑像一台永远在寻找「另一种可能」的发动机。别人习以为常的规则，你总想问一句：为什么非得这样？你喜欢观点的交锋，不是好胜，而是因为真理常常在碰撞里露出形状。你语速快、点子密、好奇心旺盛，能把一场闲聊变成一次头脑风暴。你讨厌一成不变，新鲜感和智力刺激对你来说和空气一样重要。你有种天赋：让严肃的事变得有趣，让有趣的事变得深刻。",
+    strengths: ["创意涌现：单位时间内产出的想法数量惊人", "临场机智：反应快，善于即兴把冷场变成火花", "挑战惯性：天然质疑低效规则，推动组织进化", "跨域联结：能在不同领域间找到意外的组合可能"],
+    weaknesses: ["开头轰轰烈烈，收尾常常无人问津", "为辩论而辩论，偶尔赢了道理、输了关系", "厌恶重复与流程，日常维护类工作容易掉链子", "兴趣切换太快，深度积累需要外部约束"],
+    relationship: "和你在一起永远不会无聊——你是那种会在凌晨一点突然说「我们聊聊如果有无限预算该怎么活」的人。你用智性调情，用玩笑表达亲密。但伴侣有时会渴望确定性：你嘴上的「随便都行」和心里的「我想清楚了」之间，最好说清楚。学会把辩论的敏捷用在理解对方而非反驳对方上，你会是最迷人的长期伴侣。",
+    career: "你适合创意策略、创业、产品增长、咨询、律师、内容创作——一切「新问题多于老流程」的战场。职业建议是：找一个擅长收尾与运营的搭档补全你的短板；给自己立一条规矩——每个项目至少交付一次完整闭环，那是把你的聪明变成战绩的唯一途径。",
+  },
+  /* ---------- NF 外交家 ---------- */
+  INFJ: {
+    name: "提倡者", tagline: "表面平静，内心装着一场理想主义的潮汐", group: "NF", match: ["ENTP", "ENFP"],
+    overview: "你有一种罕见的能力：既能敏锐读懂他人的内心，又能保持自己的完整。你是人群中的观察者与共情者，常常在别人说完之前就明白了对方想说而没说的部分。你对世界有一套清晰的理想图景，并且愿意为之 quietly 地、长期地投入。你的外表随和，内核却异常坚定——一旦触碰你的原则，那股温和之下的力量会让所有人意外。你交浅言深都谨慎，但被你认定的人，会被爱得很深。",
+    strengths: ["深度洞察：能看见人与事背后的动机和pattern", "坚定理想：价值观清晰，并为长期意义持续投入", "温和有力：以共情推进事情，而非以声压人", "全情投入：对认定的人和事有罕见的忠诚与深度"],
+    weaknesses: ["过度吸收他人情绪，容易悄悄耗尽自己", "回避冲突，不满积压到临界点才爆发或消失", "完美主义+理想主义，对人对己都过于苛刻", "习惯把自己排最后，需求长期不被看见"],
+    relationship: "你渴望的是那种「被完整看见」的关系——不只是被喜欢，而是被理解。你爱人的方式细腻而深远：记得对方的情绪周期，在意那些没被说出口的失落。但你也容易在关系里做「隐形付出者」，一边给予一边期待对方察觉。练习直接说出你的需要——你的需要和其他人的一样重要，值得被听到。",
+    career: "你适合心理咨询、教育、写作、非营利组织、人力资源、用户研究等「人与意义交汇」的领域。你需要工作与价值观对齐，纯粹逐利的环境会让你迅速枯萎。职业建议是：设定情绪边界，把「帮助他人」变成可持续的专业实践而非自我消耗；同时为自己保留独处充电的硬性时间。",
+  },
+  INFP: {
+    name: "调停者", tagline: "在全世界匆忙的地方，你守着一座内心的花园", group: "NF", match: ["ENFJ", "ENTJ"],
+    overview: "你的内心世界丰饶得像一座图书馆：每一次感受都被认真归档，每一个「本可以更好」的瞬间都被反复回味。你天性温柔，却不是没有脾气——你的温柔出于选择，你的底线深埋但坚固。你对真与诚有近乎洁癖的要求：你能容忍笨拙，但很难容忍虚伪。你常常在想象中把一件事的爱与遗憾都体验完，然后在现实里安静地把它做出来，比如一段文字、一幅画、一次不动声色的善意。",
+    strengths: ["共情深切：能设身处地到几乎替对方活一遍", "价值坚定：为认同的事可以沉默地坚持很久", "创造表达：文字、艺术等内向创作中能量惊人", "真诚底色：不做作、不敷衍，让人安心托付柔软"],
+    weaknesses: ["回避现实摩擦，账单和冲突都不会自己消失", "理想化他人，幻灭时受伤比谁都深", "自我要求严苛，容易陷入「我不够好」的内耗", "决策困难：总想找到完美选项，反而迟迟不动"],
+    relationship: "你相信爱是一种深刻的相认。你会记住对方的每一句无心之言，也会在心里为关系写一部漫长的小说。你给的爱纯粹而体贴，但容易把「不添麻烦」当成体贴本身。请记住：说出委屈不是破坏关系，而是邀请对方真正走进来。当你允许自己被看见—including 你的情绪和需要——爱才有落地的地方。",
+    career: "你适合写作、设计、心理、公益、编辑、插画等能承载个人价值的创造性领域。你需要意义感驱动，硬邦邦的 KPI 环境会让你失去灵魂。职业建议是：用外部结构保护你的创作节奏（deadline、协作机制），并练习把大理想切成能完成的小步骤——理想主义加上交付能力，你几乎不可替代。",
+  },
+  ENFJ: {
+    name: "主人公", tagline: "你相信每个人的可能性，并愿意亲手点亮它", group: "NF", match: ["INFP", "ISFP"],
+    overview: "你是那种走到哪里都自带暖光的人。你对人的潜力有近乎本能的信心：看到的不是对方现在的样子，而是他们可以成为的样子。你天生会组织人、鼓舞人、照顾人，常常在不知不觉中成为团体的灵魂。你的敏感和你的担当一样发达——你既接得住别人的情绪，也愿意为集体的福祉出手。只是你给出去的太多了，以至于「自己」这项，常年排在你清单的末位。",
+    strengths: ["感召力：能把愿景讲进人心里，让团队愿意跟", "体贴入微：对他人状态的觉察快于对方的开口", "责任担当：答应的事，扛到最后一公里", "善于调和：能看见冲突双方各自的道理并搭桥"],
+    weaknesses: ["过度承担他人的人生课题，把自己活成救生圈", "太在意评价，被误解时的内耗远超表面", "习惯给、不会收，接受照顾反而让你不自在", "在取悦与边界之间摇摆，委屈自己成全场面"],
+    relationship: "你爱人时倾尽全力：记得纪念日、记得对方的同事名字、记得 TA 上次难过的原因。你的伴侣大概率觉得你「太好了」——但你也常常偷偷计较「我为你做了这么多」。亲密关系对你的功课是：把「被爱」也当成一种能力。示弱、求助、说「我今天不行」，不是失职，而是让关系真正平衡的开始。",
+    career: "你适合教育、培训、管理、人力资源、公共关系、内容主持等「以人为产品」的领域。你天然擅长带团队、带新人、带氛围。职业建议是：学会用制度而非感情承担管理责任，练习课题分离——你可以点灯，但不必替每个人走完他们的路；同时把你的共情也分一份给自己。",
+  },
+  ENFP: {
+    name: "竞选者", tagline: "热忱不灭的创意火花，走到哪儿亮到哪儿", group: "NF", match: ["INFJ", "INTJ"],
+    overview: "你的世界里，生活是一连串值得兴奋的可能性。你热情、健谈、对人和世界都有旺盛的好奇心——你能和出租车司机聊出人生故事，也能把陌生派对变成老友聚会。你的情感真挚外放，同理心强到有时会替陌生人难过。你讨厌被框住，渴望自由与意义并重的生活：既能燃烧热爱，又能保持选择的开放。人们喜欢你，因为你让他们觉得自己有趣、被看见、被相信。",
+    strengths: ["感染力：热情真实，能点燃整个房间的气氛", "创意与直觉：灵感密度高，善于发现新的可能", "真诚共情：对人的兴趣发自内心，而非社交策略", "适应力强：变化对你不是威胁，而是新鲜空气"],
+    weaknesses: ["注意力像烟花，绽放得快、熄灭得也快", "回避琐碎与重复，事务性工作容易积压", "情绪来得快去得快，但决策可能被当下情绪带偏", "讨人喜欢的天性，让你难以说出「不」"],
+    relationship: "你谈恋爱的样子，像一场永不落幕的冒险：新鲜的约会、深夜的长谈、突然的惊喜。你给的爱炽热而真诚，但你要小心两种倾向——新鲜感退潮后的坐立不安，以及用讨好换取喜欢的惯性。真正的亲密不是永远火花四溅，而是火花之后仍愿意留下来做日常。练好在平淡里安放自己的能力，你的热情才有了根。",
+    career: "你适合创意策划、市场传播、记者、品牌、公益项目、初创团队——一切「人、故事、新东西」交汇的地方。职业建议是：给自己配外置的执行系统（清单、日历、deadline 搭档），把灵感兑现成作品；同时学会战略性地说不，把散落的热情聚焦成可以署名的成果。",
+  },
+  /* ---------- SJ 守护者 ---------- */
+  ISTJ: {
+    name: "物流师", tagline: "世界靠热情驱动，也靠你说到做到", group: "SJ", match: ["ESFP", "ESTP"],
+    overview: "你是那种「把事情托付给你，就可以放心睡觉」的人。你不爱说漂亮话，因为你的信誉写在行动里：答应的日期就是日期，承诺的标准就是标准。你尊重事实、尊重规则、尊重那些经过时间验证的方法——这不是保守，而是一种深思熟虑后的敬意。你的内心有一种安静的秩序感：东西各有其位，事情各按其时。别人未必时刻注意到你，但整个系统一旦少了你，就会立刻知道。",
+    strengths: ["可靠兑现：承诺有据可查，交付稳定如钟表", "事实严谨：决策基于证据与过往经验，少有想当然", "组织条理：流程、档案、细节，你天生管理得井井有条", "责任耐力：枯燥但重要的工作，你能长期扛住"],
+    weaknesses: ["对变化的第一反应是抵触，容易被经验套住", "规则之外的可能性考虑较少，显得不够灵活", "不擅长表达情感，关心常常藏在行动里未被接收", "对自己与他人标准都严，容易积攒无声的不满"],
+    relationship: "你的爱是那种「天气预报说降温，外套已经在门口」式的爱。你不擅长说情话，但你记得对方的药放在哪、账单哪天到期。你要注意：伴侣需要的不只是被照顾，还有被表达——把心里那句「有你在真好」说出口，你的深情才有声音。另外，偶尔放下「正确」，陪对方做一件不高效但快乐的事。",
+    career: "你适合财务、审计、法务合规、工程管理、运营、档案与质量管理——一切「准确与可靠即生命线」的岗位。职业建议是：在守住严谨的同时，每年主动学一项「超出舒适区」的新方法；你的稳健加上适度的开放，会让你成为任何组织里最被信赖的那种人。",
+  },
+  ISFJ: {
+    name: "守卫者", tagline: "温柔是你的方式，可靠是你的勋章", group: "SJ", match: ["ESTP", "ESFP"],
+    overview: "你是人群中最容易被低估、也最不可缺少的那类人。你记得每个人的口味、忌口和难处，把照顾人做成了一种无声的艺术。你有极强的责任心和观察力，能在别人开口之前就察觉不对劲。你不喜欢张扬，甚至习惯把自己的辛苦 minimized，因为你真心觉得「这没什么」。但请别误会——温柔不等于软弱。涉及你在乎的人与原则时，你有着惊人的坚持。",
+    strengths: ["体贴周到：对他人的需要体察入微并落在实处", "坚韧可靠：答应的事哪怕辛苦也会默默完成", "细节记忆：记住偏好与细节，让人如沐春风", "务实耐心：一步一个脚印，长期主义的天生选手"],
+    weaknesses: ["习惯把需求咽下去，积压成委屈或突然的爆发", "太怕麻烦别人，连合理的求助都难以开口", "对变化敏感，新流程初期会明显不适", "过度尽责，容易替别人的错误加班"],
+    relationship: "你是最会「过日子」的伴侣：家里总有热饭，冷战的冰也总是你先递话融化。你爱得具体、爱得持久，但你常常忘记把自己放进被照顾的位置。试着向伴侣提一个小小的要求，哪怕只是「今天你洗碗」——让爱流动起来，而不是单向输出。你的付出值得被回应，而说出需要，就是给对方爱你的机会。",
+    career: "你适合护理与医疗辅助、教育、行政、客户成功、图书档案、人力资源等「稳定服务人」的领域。职业建议是：学会设定工作量边界，把「好说话」变成「讲原则」；同时主动争取可见度——你的贡献值得被看见，别让谦逊挡住了晋升的路。",
+  },
+  ESTJ: {
+    name: "总经理", tagline: "与其空谈愿景，不如先定好流程和截止日", group: "SJ", match: ["ISFP", "INTP"],
+    overview: "你是天生的组织者：见到混乱就想立规矩，见到低效就想优化流程。你务实、直接、执行力强，相信把正确的事一次做对，胜过十次漂亮的讨论。你对标准的坚持近乎固执，但那源于一种朴素的信念——每个人都该为自己的部分负责。你在集体里常常是那个「靠得住的人」：危机关头不慌，因为你早有预案。你或许不是最柔软的那个人，但一定是最让人放心的那个。",
+    strengths: ["执行力强：从计划到交付，路径短、动作快", "组织才能：分工、排期、标准，天然的管理者", "直言有信：说一是一，团队不用猜你的立场", "危机镇定：压力越大越有秩序感"],
+    weaknesses: ["过于强硬，容易把「对的事」推得伤人", "对即兴与试错包容度低，压制创意氛围", "不自觉想掌控，授权与信任是终身课题", "把情感表达视为低效，亲密关系里显得生硬"],
+    relationship: "在感情里，你是「解决问题型」的伴侣：家里的大小事被你安排得明明白白，安全感给得足足的。但你容易把关系活成项目管理——计划精确，温情不足。对方偶尔想要的不是更优方案，而是你放下手机的一句「今天怎么样」。练习把「纠错」的冲动延迟三秒，先共情再建议，你的可靠会更有温度。",
+    career: "你适合管理、运营、供应链、工程项目、公共事务、银行信贷等强调流程与结果的领域。你的职业护城河是「确定性交付」。职业建议是：刻意培养对非标事务的弹性，学会用提问代替指令；当你能同时驾驭制度与人心，你的管理半径会大得多。",
+  },
+  ESFJ: {
+    name: "执政官", tagline: "把每个人照顾好，就是你定义的成功", group: "SJ", match: ["ISFP", "ISTP"],
+    overview: "你是聚会的组织者、团队的黏合剂、朋友圈的日历提醒。你真心实意地在意周围每个人的状态：谁被冷落了、谁最近不容易，你都看在眼里，落在行动上。你相信善意与秩序的力量，愿意为集体的和谐投入大量心力。你的快乐很具体：一桌人吃得开心、一场活动顺利落幕、一句「多亏有你」。只是你常常用别人的评价来校准自己——这是你的温暖之源，也是你的疲惫之根。",
+    strengths: ["热心周到：主动张罗，让每个人都有归属感", "善于协调：能敏锐察觉气氛并即时修复", "责任可靠：答应的事记得牢、办得妥", "执行落地：关怀不停留在嘴上，全是具体行动"],
+    weaknesses: ["太在意他人评价，负面反馈会让你反复内耗", "回避冲突，宁可自己受委屈也要维持和气", "有时过度介入，好心变成别人的压力", "把自己排最后，长期透支而不自知"],
+    relationship: "你是那个记得所有纪念日、把对方父母照顾妥帖、朋友圈里公认「娶到/嫁到就是福气」的伴侣。你的爱热烈而具体，但要小心两件事：一是用付出交换安全感，二是把「被需要」等同于「被爱」。练习一些「什么都不做、只是待着」的时刻——你先放松下来，关系里的人才敢真正松弛。",
+    career: "你适合客户关系、行政人事、活动策划、酒店管理、社区服务、医护协调等「经营人与人」的岗位。职业建议是：练习在善意之上加一层边界，学会对不合理的要求说不；同时把你的组织能力从「照顾个人」升级到「建设机制」，你会拥有更大的舞台。",
+  },
+  /* ---------- SP 探索家 ---------- */
+  ISTP: {
+    name: "鉴赏家", tagline: "少说，多做，拆开看看", group: "SP", match: ["ESFJ", "ESTJ"],
+    overview: "你是那种话不多、但手上有真功夫的人。世界对你来说最好玩的地方在于：可以拆、可以试、可以修。你对机械、工具、系统有一种天然的亲近感，遇到坏了的东西，别人先找说明书，你先上手摸。你的冷静近乎传奇——不是没有情绪，而是情绪很少干扰你解决问题。你讨厌被安排、被说教、被围观，你需要的是一片允许你自己折腾的天地。",
+    strengths: ["动手能力：从修电路到救场，实操问题一出手就见效", "危机冷静：越紧急越安静，判断稳而准", "务实灵活：不迷信理论，什么管用什么上手", "独立自主：给定目标与空间，你就能交付惊喜"],
+    weaknesses: ["沟通极简，容易被误解为冷漠或不投入", "对长期规划无感，常常走到哪儿算哪儿", "不耐烦规则与流程，职场里容易「程序性摩擦」", "情感表达高度精简，亲近的人也会觉得猜不透"],
+    relationship: "你的爱是「行动派」的：轮胎该换了、电脑卡了、柜子松了——你默默处理，从不邀功。你不擅长语言上的缠绵，甚至会在对方想深聊时想逃。但你的伴侣需要知道：你的沉默不等于不在乎。给你的功课是：每天留十分钟纯聊天的锅，不修任何东西，只说话。那十分钟，比你修好一切更让 TA 觉得亲密。",
+    career: "你适合工程技术、飞行员与驾驶、外科与急救、运动与户外、设备运维、独立手作——一切「手脑并用、结果说话」的领域。职业建议是：接受最小限度的流程协作，把你的即兴天赋用在有 deadline 的战场；偶尔主动同步进展，别让你的靠谱只体现在结果上。",
+  },
+  ISFP: {
+    name: "探险家", tagline: "美不必解释，感受不必辩护", group: "SP", match: ["ENFJ", "ESFJ"],
+    overview: "你活得很真：喜欢就是喜欢，不舒服就是不舒服——虽然这些大多写在你微妙的表情和突然的沉默里，而不是嘴上。你有极强的审美直觉，色彩、质感、氛围，你的手一碰就对。你不喜欢争辩，也不喜欢控制谁，你只想按自己的节奏过一种「对得起自己感受」的生活。你看似随和好说话，但内核有一块谁也拿不走的自由——那是你的圣域。",
+    strengths: ["审美天赋：对美与质感有天生的敏感与手感", "温柔在场：安静地陪伴与照顾，让人放松", "灵活随性：不较劲、不拧巴，与你相处很舒服", "真诚一致：表达的与感受的基本一致，不装"],
+    weaknesses: ["回避冲突与计划，长期目标容易被搁置", "敏感内收，委屈不说出口、独自消化", "对压力式管理反弹强烈，容易消极抵抗", "自我评价偏低，容易低估自己的作品与能力"],
+    relationship: "你是那种用一杯手冲、一次精心挑选的礼物、一场说走就走的短途旅行来告白的人。你的爱柔软、具体、充满生活质感。但你需要练习两件事：一是把「我在意」说出口，别让对方靠猜；二是冲突来临时别消失——你的沉默在对方眼里可能被放大成疏远。你在场，就已经是最好的安慰，别低估这一点。",
+    career: "你适合设计、摄影、手工与工艺、烘焙与料理、园艺、康复理疗、宠物行业等「手感与审美」的领域。职业建议是：给自己搭最小限度的商业框架（报价、合同、交付时间），保护你的创作不被琐事淹没；定期把作品示人，你的才华需要被看见才能回流成自信。",
+  },
+  ESTP: {
+    name: "企业家", tagline: "机会不等人，但你跑得比机会快", group: "SP", match: ["ISFJ", "ISTJ"],
+    overview: "你是那种「事来了先干再说」的人。你反应快、胆子大、对现实世界的规则手感极佳——别人还在分析风险，你已经试出了第一条路。你享受竞争、享受临场、享受那种肾上腺素推着你走的感觉。你幽默直接，是人堆里最不装的那个。对你来说，理论要为现实让路，计划要为变化让路。你未必是最有耐心的人，但一定是最敢上场的人。",
+    strengths: ["临场敏锐：危机中反应最快，善于抓住稍纵即逝的机会", "务实大胆：敢下注、敢试错、敢于承担可见的代价", "社交魅力：直来直去，三句话就能和陌生人打成一片", "解决问题的手感：不绕弯，直接打七寸"],
+    weaknesses: ["耐心预算低，重复与等待会让你迅速失去兴趣", "先动手后评估，偶尔踩到本可预见的坑", "直言不讳有时越过了「直率」与「伤人」的界线", "对长期主义与细节收尾缺乏兴趣"],
+    relationship: "和你在一起像坐过山车——刺激、好玩、永远有下一站。你表达爱很直接：想见就见，想夸就夸，行动力满分。但亲密关系里最难的部分恰恰是「留」：新鲜感之后的日常、冲突之后的修复、对方情绪低潮时的慢节奏陪伴。这些「不刺激」的时刻，才是你真正的考场。好消息是：你的投入一旦被点燃，同样很燃。",
+    career: "你适合销售、创业、谈判、应急与安防、体育经纪、活动运营、操盘类投资——一切「快节奏、强反馈」的战场。职业建议是：给自己配一个擅长风控与收尾的搭档，把你的赌性约束在系统性赔率里；练习把一件长周期的事做完，那是你从「机会猎手」升级为「真正企业家」的门票。",
+  },
+  ESFP: {
+    name: "表演者", tagline: "此刻的快乐，值得全力以赴", group: "SP", match: ["ISTJ", "ISFJ"],
+    overview: "你走到哪里，哪里的灯光就亮一度。你天生知道如何让场面活起来：一个表情、一句接话、一次突然的提议。你对快乐有敏锐的嗅觉，对沉闷有零容忍。你在意人，也容易被人喜欢，因为你给出去的 heat 是真实的——你不是在表演快乐，你是真的觉得此刻值得庆祝。你有艺术细胞，有生活品味，有一堆「下次一起」的计划。唯一的功课，是学会和「以后」打交道。",
+    strengths: ["感染力满分：把氛围和士气都拉起来的天赋", "活在当下：对此刻的体验与快乐全情投入", "审美与表演：镜头感、舞台感、生活美学的直觉", "热心肠：朋友的事，你比当事人还上心"],
+    weaknesses: ["对枯燥的长期任务缺乏耐性，常被 deadline 追着跑", "消费与决策跟着情绪走，容易「当下爽」透支「以后难」", "回避沉重话题，问题容易被快乐暂时盖住", "太在意气氛，有时该严肃时也停不下来"],
+    relationship: "恋爱里的你是糖果：惊喜、幽默、把普通周末过成节日。你的伴侣大概率从没无聊过。但关系的深处需要一些「不快乐也同在」的时刻——低谷、争执、规划未来。别用热闹回避它们。你给快乐的能力无人能敌，如果再学会在平淡和困难里坐得住，你会是那种一起变老依然有趣的稀有人物。",
+    career: "你适合主持与直播、市场活动、销售、旅游体验、美妆时尚、幼儿教育、内容创作——一切「现场感与人缘」变现的领域。职业建议是：建立一个替你管「以后」的系统（自动储蓄、固定复盘、靠谱经纪人或搭档），让冲动的你安全地跑，你负责发光，系统负责续航。",
+  },
+};
+
+const MBTI = { QUESTIONS, TYPES, DIM_LETTERS, DIM_ORDER, scoreAnswers, judge };
+if (typeof window !== "undefined") window.MBTI = MBTI;
+if (typeof module !== "undefined" && module.exports) module.exports = MBTI;
+</script>
+<!-- ======== UI 交互逻辑 ======== -->
+<script id="app">
+(function () {
+  "use strict";
+  const { QUESTIONS: Q, TYPES, DIM_LETTERS, DIM_ORDER, scoreAnswers, judge } = window.MBTI;
+  const LIKERT = ["非常不同意", "不同意", "一般", "同意", "非常同意"];
+  const KEYS = { result: "mbti_result_v1", progress: "mbti_progress_v1" };
+  const GROUP_FULL = { NT: "分析家", NF: "外交家", SJ: "守护者", SP: "探索家" };
+  const GROUP_ACCENT = { NT: "var(--c-nt)", NF: "var(--c-nf)", SJ: "var(--c-sj)", SP: "var(--c-sp)" };
+  const $ = (s) => document.querySelector(s);
+
+  const store = {
+    get(k) { try { const v = localStorage.getItem(k); return v ? JSON.parse(v) : null; } catch (e) { return null; } },
+    set(k, v) { try { localStorage.setItem(k, JSON.stringify(v)); } catch (e) { /* 隐私模式等场景静默降级 */ } },
+    del(k) { try { localStorage.removeItem(k); } catch (e) {} },
+  };
+
+  const App = { view: "home", answers: new Array(Q.length).fill(null), current: 0, result: null, calcTimer: null };
+
+  function show(view) {
+    App.view = view;
+    if (App.calcTimer && view !== "calculating") { clearInterval(App.calcTimer); App.calcTimer = null; }
+    document.querySelectorAll(".view").forEach((v) => v.classList.toggle("active", v.dataset.view === view));
+    window.scrollTo(0, 0);
+  }
+
+  /* ---------- 首页 ---------- */
+  function renderHome() {
+    const prog = store.get(KEYS.progress);
+    const res = store.get(KEYS.result);
+    const hasProg = !!(prog && prog.answers && prog.answers.some((a) => a != null));
+    $("#btnContinue").hidden = !hasProg;
+    $("#btnLast").hidden = !res;
+    show("home");
+  }
+
+  /* ---------- 答题 ---------- */
+  function answeredCount() { return App.answers.filter((a) => a != null).length; }
+
+  function updateProgress() {
+    $("#quizBar").style.transform = "scaleX(" + (answeredCount() / Q.length) + ")";
+    $("#quizCount").textContent = (App.current + 1) + " / " + Q.length;
+  }
+
+  function renderQuestion(animate) {
+    const card = $("#qCard");
+    const draw = () => {
+      const i = App.current, q = Q[i];
+      $("#qNum").innerHTML = "Q." + String(i + 1).padStart(2, "0") + " <small>/ " + Q.length + " · 测量 " + q.dim + " 维度</small>";
+      $("#qText").textContent = q.text;
+      const likert = $("#likert");
+      likert.innerHTML = "";
+      LIKERT.forEach((label, li) => {
+        const b = document.createElement("button");
+        b.type = "button";
+        b.textContent = li + 1 + " · " + label;
+        b.dataset.action = "answer";
+        b.dataset.value = li;
+        if (App.answers[i] === li) b.classList.add("picked");
+        likert.appendChild(b);
+      });
+      $("#btnPrev").disabled = i === 0;
+      updateProgress();
+      card.classList.remove("leaving", "entering");
+    };
+    if (animate) {
+      card.classList.add("leaving");
+      setTimeout(() => {
+        card.classList.add("entering");
+        draw();
+        requestAnimationFrame(() => requestAnimationFrame(() => card.classList.remove("entering")));
+      }, 90);
+    } else draw();
+  }
+
+  function startQuiz() {
+    show("quiz");
+    renderQuestion(false);
+  }
+
+  function resetAnswers() {
+    App.answers = new Array(Q.length).fill(null);
+    App.current = 0;
+    App.result = null;
+  }
+
+  function onAnswer(val) {
+    if (App.view !== "quiz") return;
+    App.answers[App.current] = val;
+    store.set(KEYS.progress, { answers: App.answers, current: App.current });
+    document.querySelectorAll("#likert button").forEach((b) => b.classList.toggle("picked", +b.dataset.value === val));
+    updateProgress();
+    setTimeout(() => {
+      if (App.current < Q.length - 1) { App.current++; renderQuestion(true); }
+      else finish();
+    }, 240);
+  }
+
+  function finish() {
+    App.result = judge(Q, App.answers);
+    App.result.answers = App.answers.slice();
+    App.result.finishedAt = Date.now();
+    store.set(KEYS.result, App.result);
+    store.del(KEYS.progress);
+    startCalculating(() => { renderResult(App.result); show("result"); });
+  }
+
+  /* ---------- 计算动画 ---------- */
+  function startCalculating(done) {
+    show("calculating");
+    const pairs = [["E", "I"], ["S", "N"], ["T", "F"], ["J", "P"]];
+    const els = [$("#cl1"), $("#cl2"), $("#cl3"), $("#cl4")];
+    pairs.forEach((p, i) => (els[i].textContent = p[0]));
+    App.calcTimer = setInterval(() => {
+      els.forEach((el, i) => { el.textContent = Math.random() < 0.5 ? pairs[i][0] : pairs[i][1]; });
+    }, 300);
+    setTimeout(done, 2400);
+  }
+
+  /* ---------- 结果渲染 ---------- */
+  function renderResult(res) {
+    const t = TYPES[res.code] || Object.values(TYPES)[0];
+    const group = t.group;
+    document.documentElement.style.setProperty("--accent", GROUP_ACCENT[group]);
+
+    const d = new Date(res.finishedAt || Date.now());
+    const dateStr = d.getFullYear() + "." + String(d.getMonth() + 1).padStart(2, "0") + "." + String(d.getDate()).padStart(2, "0");
+    $("#rIssue").textContent = "封面人物 · " + GROUP_FULL[group] + "族 · 刊于 " + dateStr;
+    $("#rCode").textContent = res.code;
+    $("#rName").textContent = t.name + "型人格";
+    $("#rTagline").textContent = "「" + t.tagline + "」";
+
+    // 维度条
+    const wrap = $("#rDims");
+    wrap.innerHTML = "";
+    DIM_ORDER.forEach((dim, idx) => {
+      const info = res.dims[dim];
+      const L = DIM_LETTERS[dim];
+      const row = document.createElement("div");
+      row.className = "dim-row";
+      row.innerHTML =
+        '<div class="dim-top">' +
+          '<span class="dim-letters">' + L.opp + ' ◂ <b>' + L.pole + '</b></span>' +
+          '<span class="dim-pct">' + info.polePct + '<small>% ' + L.pole + '</small></span>' +
+        '</div>' +
+        '<div class="dim-track"><i style="width:0"></i></div>' +
+        '<div class="dim-note">倾向 ' + info.letter + ' · ' + info.label +
+          (info.tied ? " · 倾向轻微，重测可能波动" : "") +
+        '</div>';
+      wrap.appendChild(row);
+      const bar = row.querySelector(".dim-track i");
+      setTimeout(() => { bar.style.width = info.polePct + "%"; }, 250 + idx * 150);
+    });
+
+    // 雷达图
+    $("#rRadar").innerHTML = radarSVG(res);
+
+    // 内容板块
+    $("#rOverview").innerHTML = "<p></p>";
+    $("#rOverview p").textContent = t.overview;
+    $("#rStrengths").innerHTML = t.strengths.map((s) => "<li>" + esc(s) + "</li>").join("");
+    $("#rWeaknesses").innerHTML = t.weaknesses.map((s) => "<li>" + esc(s) + "</li>").join("");
+    $("#rRelation").innerHTML = "<p></p>";
+    $("#rRelation p").textContent = t.relationship;
+    $("#rCareer").innerHTML = "<p></p>";
+    $("#rCareer p").textContent = t.career;
+
+    // 逐题回顾
+    const rv = $("#rReview");
+    rv.innerHTML = "";
+    Q.forEach((q, i) => {
+      const a = res.answers ? res.answers[i] : null;
+      const item = document.createElement("div");
+      item.className = "review-item";
+      item.innerHTML =
+        '<div class="rv-meta"><span>Q.' + String(i + 1).padStart(2, "0") + " · " + q.dim + "</span><br>" +
+          '<span class="rv-ans">' + (a == null ? "未作答" : LIKERT[a]) + "</span></div>" +
+        '<div class="rv-body"><b></b><div class="rv-note"></div></div>';
+      item.querySelector("b").textContent = q.text;
+      item.querySelector(".rv-note").textContent = "本题测量：" + q.note;
+      rv.appendChild(item);
+    });
+
+    // 滚动进场
+    const io = new IntersectionObserver((entries) => {
+      entries.forEach((en) => { if (en.isIntersecting) { en.target.classList.add("revealed"); io.unobserve(en.target); } });
+    }, { threshold: 0.12 });
+    document.querySelectorAll("#view-result .reveal").forEach((el) => { el.classList.remove("revealed"); io.observe(el); });
+  }
+
+  function esc(s) { return s.replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;"); }
+
+  function radarSVG(res) {
+    const cx = 110, cy = 110, R = 84;
+    const dirs = [[0, -1], [1, 0], [0, 1], [-1, 0]];
+    const vals = DIM_ORDER.map((dim) => res.dims[dim].polePct / 100);
+    const pt = (k, f) => { const [dx, dy] = dirs[k]; return (cx + dx * R * f).toFixed(1) + "," + (cy + dy * R * f).toFixed(1); };
+    let out = "";
+    for (let f = 0.25; f <= 1.001; f += 0.25) {
+      out += '<polygon points="' + [0, 1, 2, 3].map((k) => pt(k, f)).join(" ") + '" fill="none" stroke="oklch(0.23 0.02 60 / 0.22)" stroke-width="1"/>';
+    }
+    out += dirs.map(([dx, dy]) =>
+      '<line x1="' + cx + '" y1="' + cy + '" x2="' + (cx + dx * R) + '" y2="' + (cy + dy * R) + '" stroke="oklch(0.23 0.02 60 / 0.22)" stroke-width="1"/>'
+    ).join("");
+    out += '<polygon points="' + vals.map((v, k) => pt(k, v)).join(" ") + '" fill="var(--accent)" fill-opacity="0.3" stroke="var(--accent)" stroke-width="2.5" stroke-linejoin="round"/>';
+    out += vals.map((v, k) => { const [dx, dy] = dirs[k]; return '<circle cx="' + (cx + dx * R * v).toFixed(1) + '" cy="' + (cy + dy * R * v).toFixed(1) + '" r="4" fill="var(--accent)"/>'; }).join("");
+    const labels = [
+      { t: DIM_LETTERS.EI.pole + " / " + DIM_LETTERS.EI.opp, x: cx, y: cy - R - 10, anchor: "middle" },
+      { t: DIM_LETTERS.SN.pole + " / " + DIM_LETTERS.SN.opp, x: cx + R + 12, y: cy + 4, anchor: "start" },
+      { t: DIM_LETTERS.TF.pole + " / " + DIM_LETTERS.TF.opp, x: cx, y: cy + R + 18, anchor: "middle" },
+      { t: DIM_LETTERS.JP.pole + " / " + DIM_LETTERS.JP.opp, x: cx - R - 12, y: cy + 4, anchor: "end" },
+    ];
+    out += labels.map((l) =>
+      '<text x="' + l.x + '" y="' + l.y + '" text-anchor="' + l.anchor + '" font-size="11" fill="oklch(0.38 0.02 60)" font-family="Fraunces,serif" font-style="italic">' + l.t + "</text>"
+    ).join("");
+    return '<svg viewBox="-30 -14 280 258" role="img" aria-label="四维倾向雷达图">' + out + "</svg>";
+  }
+
+  /* ---------- 事件委托 ---------- */
+  document.addEventListener("click", (e) => {
+    const el = e.target.closest("[data-action]");
+    if (!el) return;
+    switch (el.dataset.action) {
+      case "answer": onAnswer(+el.dataset.value); break;
+      case "start": resetAnswers(); startQuiz(); break;
+      case "continue": {
+        const prog = store.get(KEYS.progress);
+        if (prog && prog.answers) {
+          App.answers = Q.map((_, i) => (prog.answers[i] == null ? null : prog.answers[i]));
+          App.current = Math.min(prog.current || 0, Q.length - 1);
+          startQuiz();
+        } else { resetAnswers(); startQuiz(); }
+        break;
+      }
+      case "lastResult": {
+        const res = store.get(KEYS.result);
+        if (res) { App.result = res; renderResult(res); show("result"); }
+        break;
+      }
+      case "prev":
+        if (App.current > 0) { App.current--; renderQuestion(true); }
+        break;
+      case "quit":
+        store.set(KEYS.progress, { answers: App.answers, current: App.current });
+        renderHome();
+        break;
+      case "restart":
+        resetAnswers();
+        store.del(KEYS.progress);
+        store.del(KEYS.result);
+        startQuiz();
+        break;
+    }
+  });
+
+  /* 键盘快捷键：1-5 作答，← 回上一题 */
+  document.addEventListener("keydown", (e) => {
+    if (App.view !== "quiz") return;
+    const n = parseInt(e.key, 10);
+    if (n >= 1 && n <= 5) { onAnswer(n - 1); return; }
+    if (e.key === "ArrowLeft" && App.current > 0) { App.current--; renderQuestion(true); }
+  });
+
+  /* ---------- 初始化 ---------- */
+  const now = new Date();
+  $("#mastDate").textContent = "VOL.01 · " + now.getFullYear() + "." + String(now.getMonth() + 1).padStart(2, "0") + "." + String(now.getDate()).padStart(2, "0");
+  renderHome();
+})();
+</script>
+</body>
+</html>
